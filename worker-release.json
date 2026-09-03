@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "worker_version": "0.1.0",
+  "worker_version": "0.2.0",
   "artifact": {
-    "filename": "xix_colab_worker-0.1.0-py3-none-any.whl",
-    "size_bytes": 30259,
-    "sha256": "82f42421fb1bd805c3fba0f43bf71b75498495c27668844491c115e057fd08b5"
+    "filename": "xix_colab_worker-0.2.0-py3-none-any.whl",
+    "size_bytes": 35171,
+    "sha256": "5bfc415a785d05be8186f13dbf5662d8089eb880534d339568786e2c84834f64"
   },
   "build": {
     "backend": "setuptools==83.0.0",
-    "source_date_epoch": 1788314180,
+    "source_date_epoch": 1788307200,
     "command": "python -m pip wheel --no-deps --no-build-isolation colab/worker"
   }
 }

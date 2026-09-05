@@ -20,7 +20,7 @@ Notebook mewajibkan `MyDrive/XIX-Upscaler/desktop-marker.json` dengan format ver
 
 Jika muncul **Akun Drive tidak cocok**, pastikan mount memakai akun yang sama seperti desktop, tekan Start di desktop, tunggu upload selesai, lalu jalankan Run all kembali. Marker rusak atau tidak sesuai juga menghentikan notebook; jangan membuat atau mengedit marker dan folder job sendiri. Notebook memeriksa penanda desktop yang ada, bukan membandingkan alamat email akun.
 
-Jika runtime terputus, jalankan **Run all** lagi; checkpoint yang valid dipakai untuk melanjutkan. **Pause** berlaku setelah checkpoint aman, sedangkan **Stop** membatalkan job yang belum selesai. Menutup aplikasi tidak membatalkan pekerjaan; desktop yang mendukung pemulihan melanjutkan pemantauan ketika dibuka kembali. Ringkasan Colab membedakan job selesai, dijeda, dibatalkan, gagal, dan dilewati.
+Jika runtime terputus, jalankan **Run all** lagi; checkpoint yang valid dipakai untuk melanjutkan. **Pause** berlaku setelah checkpoint aman dan dapat dibatalkan sebelum semua video mengonfirmasi jeda. Saat dilanjutkan, desktop membuka notebook kembali agar pengguna dapat menjalankan **Run all**. **Stop** membatalkan job yang belum selesai. Menutup aplikasi tidak membatalkan pekerjaan; desktop yang mendukung pemulihan melanjutkan pemantauan ketika dibuka kembali. Ringkasan Colab membedakan job selesai, dijeda, dibatalkan, gagal, dan dilewati.
 
 Dengan **Simpan file kerja di Drive** mati, desktop memindahkan folder job ke Trash hanya setelah hasil lokal terverifikasi. Input lokal dan hasil lokal tidak dihapus otomatis.
 

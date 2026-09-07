@@ -29,7 +29,7 @@ Dengan **Simpan file kerja di Drive** mati, desktop memindahkan folder job ke Tr
 Notebook memasang worker XIX yang versinya dikunci dan memverifikasi ukuran serta SHA-256 paket sebelum menjalankannya. Model NanoVSR dan RIFE diunduh dari sumber resminya dan juga diverifikasi.
 
 - Worker: `0.2.0`; manifest pekerjaan: versi `2`, protokol `drive-slots-v1`.
-- [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/03f3471c4db601a2b2483cced9f6b0418618b16a).
+- [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/f02553a185cf37505b1b8b894954fc821470f08e).
 - Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **35.173 byte**.
 - SHA-256: `edb695e348704445baae3739c8c608b5184891bf38a127b2cf9c5fada0323025`.
 - Dibangun dua kali dengan `setuptools==83.0.0` dan `SOURCE_DATE_EPOCH=1788307200`; kedua hasil identik. Rincian ada di [worker-release.json](worker-release.json).

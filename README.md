@@ -1,6 +1,6 @@
 # XIX-Upscaler Colab
 
-Notebook publik **0.2.0** untuk engine **Video (Colab Experimental)** pada XIX-Upscaler. Gunakan bersama versi desktop yang mendukung pekerjaan Google Drive dengan worker 0.2.0.
+Notebook publik **0.2.0** untuk engine **Video (Colab Experimental)** pada XIX-Upscaler. Gunakan bersama versi desktop yang mendukung pekerjaan Google Drive dengan worker 0.2.0. Runtime Python Colab 3.10–3.13 didukung.
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb)
 
@@ -30,8 +30,8 @@ Notebook memasang worker XIX yang versinya dikunci dan memverifikasi ukuran sert
 
 - Worker: `0.2.0`; manifest pekerjaan: versi `2`, protokol `drive-slots-v1`.
 - [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/03f3471c4db601a2b2483cced9f6b0418618b16a).
-- Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **35.171 byte**.
-- SHA-256: `5bfc415a785d05be8186f13dbf5662d8089eb880534d339568786e2c84834f64`.
+- Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **35.173 byte**.
+- SHA-256: `edb695e348704445baae3739c8c608b5184891bf38a127b2cf9c5fada0323025`.
 - Dibangun dua kali dengan `setuptools==83.0.0` dan `SOURCE_DATE_EPOCH=1788307200`; kedua hasil identik. Rincian ada di [worker-release.json](worker-release.json).
 
 Jangan mengubah URL paket atau checksum. Jika verifikasi gagal, buka notebook resmi yang sesuai dari desktop. Notebook ini tidak memproses manifest lama versi 1.

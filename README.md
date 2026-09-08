@@ -29,10 +29,20 @@ Dengan **Simpan file kerja di Drive** mati, desktop memindahkan folder job ke Tr
 Notebook memasang worker XIX yang versinya dikunci dan memverifikasi ukuran serta SHA-256 paket sebelum menjalankannya. Model NanoVSR dan RIFE diunduh dari sumber resminya dan juga diverifikasi.
 
 - Worker: `0.2.0`; manifest pekerjaan: versi `2`, protokol `drive-slots-v1`.
-- [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/f02553a185cf37505b1b8b894954fc821470f08e).
-- Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **35.173 byte**.
-- SHA-256: `edb695e348704445baae3739c8c608b5184891bf38a127b2cf9c5fada0323025`.
-- Dibangun dua kali dengan `setuptools==83.0.0` dan `SOURCE_DATE_EPOCH=1788307200`; kedua hasil identik. Rincian ada di [worker-release.json](worker-release.json).
+- [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/3f1be81a5f6e0b6726bdd42afb7ece7d4c319a52).
+- Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **38.833 byte**.
+- SHA-256: `7581d81ef0da30c7cfef8458f0cb09f6a499977c729562da58c9dd08fa9f6928`.
+- Dibangun dengan `setuptools==83.0.0` dan `SOURCE_DATE_EPOCH=1788307200`. Rincian ada di [worker-release.json](worker-release.json).
+
+## Kecepatan dan laporan waktu
+
+Penyusunan MP4 memakai H.264 (`libx264`, preset `veryfast`, CRF 18, 2 thread untuk membatasi RAM). Ukuran frame, FPS, dan pilihan suara tidak diubah oleh pembaruan ini. Pengaturan kompresi lebih cepat dapat mengubah ukuran file dan detail gambar; ini bukan janji kelulusan penilaian Adobe Stock.
+
+Setiap percobaan pekerjaan menampilkan `[COLAB-PERF]` dan menyimpan `work/performance.json`: waktu penyalinan input, pemuatan model, pembacaan video, interpolasi, upscale, penulisan MP4, checkpoint, penggabungan, audio, dan verifikasi hasil. Laporan tetap dibuat untuk pekerjaan gagal atau dijeda selama proses worker masih berjalan; penghentian paksa runtime tidak dapat dijamin. Jika Drive tidak dapat ditulisi, ringkasan tetap ada di keluaran notebook. Aktifkan **Simpan file kerja di Drive** di desktop bila ingin mempertahankan laporan bersama job selesai.
+
+Waktu dihitung sejak worker menerima job, bukan sejak Start desktop. Waktu pemasangan notebook dan upload desktop tidak termasuk. Waktu penulisan MP4 mencakup menunggu encoder; encoder dapat bekerja bersamaan dengan AI. Nama GPU dan penggunaan memori dicatat bila tersedia, tetapi bukan persentase aktivitas GPU. Angka puncak memori mencakup umur proses worker, bukan hanya job terakhir.
+
+Uji lokal 24 frame dari hasil 5120×2880/30 FPS: pengukuran awal preset lama `medium` 23,189 detik, `veryfast` 6,057 detik; pengulangan berikutnya 25,684 dan 23,659 detik. Beban komputer membuat waktu bervariasi, jadi angka percepatan awal tidak dapat digeneralisasi. SSIM terhadap video sumber uji masing-masing 0,998827 dan 0,998488, dengan hasil berkas identik pada pengulangan preset yang sama. Ini hanya uji kompresi cuplikan 0,8 detik tanpa inferensi AI, bukan perkiraan waktu keseluruhan di Colab. Buka ulang notebook resmi dan Run all untuk memasang paket terbaru; checkpoint lama yang valid tetap digunakan.
 
 Jangan mengubah URL paket atau checksum. Jika verifikasi gagal, buka notebook resmi yang sesuai dari desktop. Notebook ini tidak memproses manifest lama versi 1.
 

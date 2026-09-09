@@ -1,53 +1,50 @@
-# XIX-Upscaler Colab
+# XIX-Upscaler Video Colab (Experimental)
 
-Notebook publik **0.2.0** untuk engine **Video (Colab Experimental)** pada XIX-Upscaler. Gunakan bersama versi desktop yang mendukung pekerjaan Google Drive dengan worker 0.2.0. Runtime Python Colab 3.10–3.13 didukung.
+Mode ini memakai GPU Google Colab dan Google Drive milik pengguna. XIX tidak menyediakan server, GPU, penyimpanan, atau biaya komputasi. Notebook tidak memakai layanan perantara dan tidak berusaha mempertahankan sesi Colab secara paksa.
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb)
+## Status tahap ini
 
-## Cara menggunakan
+Pembaruan kinerja: hasil tetap MP4/H.264 dengan skala, FPS, dan pilihan suara dari desktop. Penyusunan video memakai `libx264 veryfast`, CRF 18, dan dua thread agar penggunaan RAM tetap terbatas. Kompresi lebih cepat dapat mengubah ukuran file dan detail gambar; bukan jaminan video diterima Adobe Stock.
 
-1. Di desktop, pilih video, Folder Hasil, Mute, dan Target FPS, lalu tekan **Start**.
-2. Hubungkan akun Google bila diminta dan tunggu seluruh upload selesai. Desktop membuka notebook ini; tautan **Open in Colab** juga tersedia di atas.
-3. Pilih runtime **GPU**, lalu **Runtime → Run all**.
-4. Izinkan mount Google Drive dengan **akun yang sama** seperti di desktop.
-5. Biarkan tab Colab terbuka. Worker memproses job satu per satu; desktop memantau, mengunduh, dan memverifikasi hasil ke Folder Hasil.
+Worker menampilkan `[COLAB-PERF]` dan menyimpan `work/performance.json` untuk setiap percobaan job, termasuk percobaan gagal/jeda yang masih sempat diselesaikan worker. Laporan memisahkan waktu penyalinan input, pemuatan model, pembacaan frame, interpolasi, upscale, penulisan MP4, checkpoint, audio, dan penyimpanan/verifikasi hasil. Upload desktop serta pemasangan notebook sebelumnya tidak termasuk. Penggunaan memori GPU bukan persentase aktivitas GPU; nilai puncak berlaku sejak proses worker dimulai. Untuk mempertahankan laporan bersama job selesai, aktifkan **Simpan file kerja di Drive**.
 
-Semua pengaturan berasal dari desktop. Notebook tidak menyediakan unggahan file atau membuat folder antrean baru. Setiap input dibatasi **100 MB (104.857.600 byte)** dan **60 detik**; batas diperiksa kembali oleh worker. NanoVSR melakukan upscale 4×, dan RIFE mendukung Target FPS yang lebih tinggi hingga 60 fps. Mute menghilangkan audio bila diaktifkan.
+Uji encoder tanpa AI pada input ZIP hasil desktop dapat diulang dengan `colab/worker/tools/benchmark_encoder.py <zip> --presets medium current` (atur `PYTHONPATH` ke `colab/worker/src`). Script membaca 24 frame pertama hasil 5K, membandingkan kompresi, memeriksa codec/FPS/resolusi, dan menghitung SSIM. Berkas uji sementara dibersihkan otomatis dan ZIP asli tidak diubah. Angka ini hanya pengukuran encoder lokal, bukan kecepatan GPU Colab atau penilaian kualitas model AI.
 
-## Folder desktop dan pemulihan
+Worker video dan notebook **Run all** sudah tersedia untuk pengujian. Worker memakai NanoVSR-644k untuk upscale 4× atau Real-ESRGAN resmi untuk upscale native 2×/4×, serta RIFE untuk target FPS yang lebih tinggi. Worker memproses satu pekerjaan pada satu waktu dan menyimpan checkpoint agar pekerjaan dapat dilanjutkan setelah sesi terputus.
 
-Notebook mewajibkan `MyDrive/XIX-Upscaler/desktop-marker.json` dengan format versi 1 dan identitas instalasi desktop yang valid, serta folder `MyDrive/XIX-Upscaler/jobs` yang sudah ada. Desktop membuat keduanya dan seluruh file pertukaran sebelum menerbitkan job.
+Integrasi desktop sudah tersambung: **Start** memeriksa video, menghubungkan akun bila perlu, mengunggah pekerjaan, dan membuka notebook resmi. **DRIVE** mengatur akun; **Pause/Stop** mengirim permintaan jeda/pembatalan. Desktop memantau progres, mengunduh hasil, dan memulihkan pekerjaan tersimpan ketika dibuka kembali. Pengujian lokal tidak menggantikan pengujian login Google dan GPU Colab nyata.
 
-Jika muncul **Akun Drive tidak cocok**, pastikan mount memakai akun yang sama seperti desktop, tekan Start di desktop, tunggu upload selesai, lalu jalankan Run all kembali. Marker rusak atau tidak sesuai juga menghentikan notebook; jangan membuat atau mengedit marker dan folder job sendiri. Notebook memeriksa penanda desktop yang ada, bukan membandingkan alamat email akun.
+Folder pekerjaan dibuat oleh desktop, bukan dibuat manual oleh pengguna:
 
-Jika runtime terputus, jalankan **Run all** lagi; checkpoint yang valid dipakai untuk melanjutkan. **Pause** berlaku setelah checkpoint aman dan dapat dibatalkan sebelum semua video mengonfirmasi jeda. Saat dilanjutkan, desktop membuka notebook kembali agar pengguna dapat menjalankan **Run all**. **Stop** membatalkan job yang belum selesai. Menutup aplikasi tidak membatalkan pekerjaan; desktop yang mendukung pemulihan melanjutkan pemantauan ketika dibuka kembali. Ringkasan Colab membedakan job selesai, dijeda, dibatalkan, gagal, dan dilewati.
+`MyDrive/XIX-Upscaler/jobs/<job-uuid>/`
 
-Dengan **Simpan file kerja di Drive** mati, desktop memindahkan folder job ke Trash hanya setelah hasil lokal terverifikasi. Input lokal dan hasil lokal tidak dihapus otomatis.
+Folder tersebut berisi manifest schema 2, input, dua file status pertukaran, kontrol, dan tempat hasil. Worker **0.2.0** mempertahankan identitas file yang dibuat desktop. Pilihan Mute, target FPS, model, dan skala berasal dari desktop—bukan dipilih lagi di notebook. Notebook menolak folder tanpa marker desktop yang valid, agar pekerjaan tidak diam-diam masuk ke akun lain.
 
-## Paket terverifikasi
+## Menjalankan notebook
 
-Notebook memasang worker XIX yang versinya dikunci dan memverifikasi ukuran serta SHA-256 paket sebelum menjalankannya. Model NanoVSR dan RIFE diunduh dari sumber resminya dan juga diverifikasi.
+1. Di desktop pilih **Video (Colab Experimental)**, video, Folder Hasil, FPS, serta MUTE; lalu tekan **Start** dan selesaikan login Google bila diminta.
+2. Tunggu unggahan selesai. Desktop membuka [XIX-Upscaler Colab](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb).
+3. Pilih runtime **GPU**.
+4. Pilih **Runtime → Run all**.
+5. Izinkan akses Google Drive saat diminta, menggunakan akun yang sama dengan desktop.
+6. Biarkan tab Colab aktif sampai ringkasan antrean muncul.
 
-- Worker: `0.2.0`; manifest pekerjaan: versi `2`, protokol `drive-slots-v1`.
-- [Commit artefak tetap](https://github.com/mfahryf/xix-upscaler-colab/commit/0c8647e5b437cd3cbc3cbe5723971afb701fb20f).
-- Wheel: `xix_colab_worker-0.2.0-py3-none-any.whl`, **38.911 byte**.
-- SHA-256: `f2eb63c30f6639874ee1771d154b72480609b4664f49f18c271bbaa22eeee117`.
-- Dibangun dengan `setuptools==83.0.0` dan `SOURCE_DATE_EPOCH=1788307200`. Rincian ada di [worker-release.json](worker-release.json).
+Jika sebagian unggahan gagal, notebook tidak dibuka otomatis. Tombol **BUKA COLAB** tetap tersedia untuk pekerjaan yang sudah siap. Setelah putaran itu berakhir, **Start** mencoba kembali unggahan yang masih tersimpan.
 
-## Kecepatan dan laporan waktu
+Worker menulis hasil sebagai `output.mp4` di folder job. `status.json` berisi progres atau alasan kegagalan. Mode Mute mempertahankan video tanpa audio; bila Mute mati, audio sumber dipertahankan. Target interpolasi yang didukung maksimal 60 fps, termasuk 23.976, 29.97, dan 59.94 dengan nilai waktu yang presisi.
 
-Penyusunan MP4 memakai H.264 (`libx264`, preset `veryfast`, CRF 18, 2 thread untuk membatasi RAM). Ukuran frame, FPS, dan pilihan suara tidak diubah oleh pembaruan ini. Pengaturan kompresi lebih cepat dapat mengubah ukuran file dan detail gambar; ini bukan janji kelulusan penilaian Adobe Stock.
+Desktop menyimpan hasil ke Folder Hasil setelah pemeriksaan ukuran, checksum, dan metadata video. Secara default hanya folder pekerjaan yang sudah selesai diverifikasi dipindahkan ke Sampah Drive. Aktifkan **Simpan file kerja di Drive** pada ADV bila ingin mempertahankannya. Input dan hasil lokal tidak dihapus otomatis.
 
-Setiap percobaan pekerjaan menampilkan `[COLAB-PERF]` dan menyimpan `work/performance.json`: waktu penyalinan input, pemuatan model, pembacaan video, interpolasi, upscale, penulisan MP4, checkpoint, penggabungan, audio, dan verifikasi hasil. Laporan tetap dibuat untuk pekerjaan gagal atau dijeda selama proses worker masih berjalan; penghentian paksa runtime tidak dapat dijamin. Jika Drive tidak dapat ditulisi, ringkasan tetap ada di keluaran notebook. Aktifkan **Simpan file kerja di Drive** di desktop bila ingin mempertahankan laporan bersama job selesai.
+Menutup desktop tidak membatalkan proses. Buka kembali untuk memulihkan pekerjaan; bila izin Google sudah tidak berlaku, hubungkan kembali lewat **DRIVE**. Akun yang berbeda tidak digunakan untuk mengunggah ulang pekerjaan lama. Tekan **Start** untuk mencoba kembali transfer tersimpan yang gagal. Pause menunggu titik aman dari worker dan dapat dibatalkan sebelum semua video mengonfirmasi jeda. Saat dilanjutkan, notebook dibuka kembali untuk **Run all**. Stop menyimpan permintaan pembatalan sebelum dikirim, dan tetap dapat dicoba kembali bila koneksi putus.
 
-Waktu dihitung sejak worker menerima job, bukan sejak Start desktop. Waktu pemasangan notebook dan upload desktop tidak termasuk. Waktu penulisan MP4 mencakup menunggu encoder; encoder dapat bekerja bersamaan dengan AI. Nama GPU dan penggunaan memori dicatat bila tersedia, tetapi bukan persentase aktivitas GPU. Angka puncak memori mencakup umur proses worker, bukan hanya job terakhir.
+Jika runtime terputus, buka kembali notebook dan pilih **Run all**. Checkpoint yang sudah lengkap diverifikasi sebelum dipakai; potongan yang rusak tidak dianggap selesai.
 
-Uji lokal 24 frame dari hasil 5120×2880/30 FPS: pengukuran awal preset lama `medium` 23,189 detik, `veryfast` 6,057 detik; pengulangan berikutnya 25,684 dan 23,659 detik. Beban komputer membuat waktu bervariasi, jadi angka percepatan awal tidak dapat digeneralisasi. SSIM terhadap video sumber uji masing-masing 0,998827 dan 0,998488, dengan hasil berkas identik pada pengulangan preset yang sama. Ini hanya uji kompresi cuplikan 0,8 detik tanpa inferensi AI, bukan perkiraan waktu keseluruhan di Colab. Buka ulang notebook resmi dan Run all untuk memasang paket terbaru; checkpoint lama yang valid tetap digunakan.
+## Batas penggunaan
 
-Jangan mengubah URL paket atau checksum. Jika verifikasi gagal, buka notebook resmi yang sesuai dari desktop. Notebook ini tidak memproses manifest lama versi 1.
+- Google tidak menjamin GPU, jenis GPU, durasi sesi, atau kuota Colab.
+- Input maksimal **100 MB** (104.857.600 byte) dan durasi maksimal **60 detik**, diperiksa desktop dan worker.
+- Worker hanya memproses video yang manifest-nya cocok dengan versi worker.
+- Inferensi GPU nyata harus diuji manual di Colab sebelum fitur dianggap siap untuk pengguna umum.
+- Jangan mengubah URL paket, hash, atau cell notebook. Jika pemeriksaan paket gagal, hentikan proses dan gunakan notebook resmi yang cocok dengan versi aplikasi.
 
-Repo ini hanya memuat file distribusi Colab. Source aplikasi desktop XIX-Upscaler tidak disimpan di sini.
-
-Google Colab tidak menjamin ketersediaan GPU, jenis GPU, kuota, atau durasi runtime.
-
-Rilis ini sudah melalui pengujian otomatis lokal dan pemasangan wheel pada lingkungan Python bersih. Login Google, transfer Drive, dan inferensi GPU Colab nyata masih memerlukan pengujian manual pemilik proyek sebelum dinyatakan siap untuk penggunaan umum.
+Tidak ada installer desktop yang dibangun pada tahap ini.

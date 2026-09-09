@@ -22,7 +22,7 @@ Folder tersebut berisi manifest schema 2, input, dua file status pertukaran, kon
 
 ## Menjalankan notebook
 
-1. Di desktop pilih **Video (Colab Experimental)**, video, Folder Hasil, FPS, serta MUTE; lalu tekan **Start** dan selesaikan login Google bila diminta.
+1. Di desktop pilih **Video (Colab Experimental)** untuk NanoVSR 4× atau **Video (Colab ESRGAN)** untuk Real-ESRGAN 2×/4×, lalu pilih video, Folder Hasil, FPS, serta MUTE; tekan **Start** dan selesaikan login Google bila diminta.
 2. Tunggu unggahan selesai. Desktop membuka [XIX-Upscaler Colab](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb).
 3. Pilih runtime **GPU**.
 4. Pilih **Runtime → Run all**.

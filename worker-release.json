@@ -3,8 +3,8 @@
   "worker_version": "0.2.0",
   "artifact": {
     "filename": "xix_colab_worker-0.2.0-py3-none-any.whl",
-    "size_bytes": 42848,
-    "sha256": "67e31b2d6a4af662b07f1bb4f6cd573970bbd793ef55f414aa06a61539ddb256"
+    "size_bytes": 42994,
+    "sha256": "5fce06e97553a7116fc5ba37ab3a946ebe4b8578497dc8720da461ba1f64bf8a"
   },
   "build": {
     "backend": "setuptools==83.0.0",

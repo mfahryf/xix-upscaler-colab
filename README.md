@@ -10,7 +10,7 @@ Worker menampilkan `[COLAB-PERF]` dan menyimpan `work/performance.json` untuk se
 
 Uji encoder tanpa AI pada input ZIP hasil desktop dapat diulang dengan `colab/worker/tools/benchmark_encoder.py <zip> --presets medium current` (atur `PYTHONPATH` ke `colab/worker/src`). Script membaca 24 frame pertama hasil 5K, membandingkan kompresi, memeriksa codec/FPS/resolusi, dan menghitung SSIM. Berkas uji sementara dibersihkan otomatis dan ZIP asli tidak diubah. Angka ini hanya pengukuran encoder lokal, bukan kecepatan GPU Colab atau penilaian kualitas model AI.
 
-Worker video dan notebook **Run all** sudah tersedia untuk pengujian. Worker memakai NanoVSR-644k untuk upscale 4× atau Real-ESRGAN resmi untuk upscale native 2×/4×, serta RIFE untuk target FPS yang lebih tinggi. Worker memproses satu pekerjaan pada satu waktu dan menyimpan checkpoint agar pekerjaan dapat dilanjutkan setelah sesi terputus.
+Worker video dan notebook **Run all** sudah tersedia untuk pengujian. Worker memakai NanoVSR-644k untuk upscale 4× atau Real-ESRGAN resmi untuk upscale native 2×/4×, serta RIFE untuk target FPS yang lebih tinggi. Worker memproses satu pekerjaan pada satu waktu dan menyimpan checkpoint agar pekerjaan dapat dilanjutkan setelah sesi terputus. Setelah antrean habis, notebook tidak langsung berhenti: ia memindai ulang selama `--idle-timeout` (1800 detik di notebook), sehingga video berikutnya yang selesai diunggah desktop ikut diproses tanpa **Run all** lagi.
 
 Integrasi desktop sudah tersambung: **Start** memeriksa video, menghubungkan akun bila perlu, mengunggah pekerjaan, dan membuka notebook resmi. **DRIVE** mengatur akun; **Pause/Stop** mengirim permintaan jeda/pembatalan. Desktop memantau progres, mengunduh hasil, dan memulihkan pekerjaan tersimpan ketika dibuka kembali. Pengujian lokal tidak menggantikan pengujian login Google dan GPU Colab nyata.
 
@@ -23,13 +23,13 @@ Folder tersebut berisi manifest schema 2, input, dua file status pertukaran, kon
 ## Menjalankan notebook
 
 1. Di desktop pilih **Video (Colab Experimental)** untuk NanoVSR 4× atau **Video (Colab ESRGAN)** untuk Real-ESRGAN 2×/4×, lalu pilih video, Folder Hasil, FPS, serta MUTE; tekan **Start** dan selesaikan login Google bila diminta.
-2. Tunggu unggahan selesai. Desktop membuka [XIX-Upscaler Colab](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb).
+2. Tunggu unggahan **pertama** selesai; desktop membuka [XIX-Upscaler Colab](https://colab.research.google.com/github/mfahryf/xix-upscaler-colab/blob/main/XIX-Upscaler-Colab.ipynb) saat itu juga, sementara video berikutnya masih diunggah di latar.
 3. Pilih runtime **GPU**.
 4. Pilih **Runtime → Run all**.
 5. Izinkan akses Google Drive saat diminta, menggunakan akun yang sama dengan desktop.
-6. Biarkan tab Colab aktif sampai ringkasan antrean muncul.
+6. Biarkan tab Colab aktif sampai antrean habis dan notebook berhenti sendiri.
 
-Jika sebagian unggahan gagal, notebook tidak dibuka otomatis. Tombol **BUKA COLAB** tetap tersedia untuk pekerjaan yang sudah siap. Setelah putaran itu berakhir, **Start** mencoba kembali unggahan yang masih tersimpan.
+Notebook dibuka begitu unggahan pertama siap, jadi video itu bisa langsung diproses sementara sisanya masih naik. Kegagalan pada video berikutnya tidak menutupnya kembali: baris yang gagal ditandai gagal di desktop, dan sisa playlist tetap berjalan. Tombol **BUKA COLAB** tersedia bila browser menolak dibuka. Setelah putaran berakhir, **Start** mencoba kembali unggahan yang masih tersimpan.
 
 Worker menulis hasil sebagai `output.mp4` di folder job. `status.json` berisi progres atau alasan kegagalan. Mode Mute mempertahankan video tanpa audio; bila Mute mati, audio sumber dipertahankan. Target interpolasi yang didukung maksimal 60 fps, termasuk 23.976, 29.97, dan 59.94 dengan nilai waktu yang presisi.
 
